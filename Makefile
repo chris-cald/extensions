@@ -356,3 +356,5 @@ renovate-local:  ## runs renovate locally to check syntax and test configuration
 		-e RENOVATE_DRY_RUN=full \
 	renovate/renovate
 
+
+-include Makefile.calan-vgpu
