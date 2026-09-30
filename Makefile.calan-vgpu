@@ -2,5 +2,6 @@
 
 vgpu-extension: ## Build/push NVIDIA vGPU system extension and record its digest.
 	@test -n "$(BUILD_RESULT_PATH)" || (echo "BUILD_RESULT_PATH is required" >&2; exit 2)
+	@mkdir -p "$(ARTIFACTS)"
 	@$(MAKE) docker-nonfree-kmod-nvidia-production TARGET_ARGS="--tag=$(REGISTRY_AND_USERNAME)/nonfree-kmod-nvidia-production:$(IMAGE_TAG) --push=$(PUSH) --metadata-file=$(ARTIFACTS)/nonfree-kmod-nvidia-production.metadata.json"
 	@python3 -c 'import json, os, pathlib, subprocess; p=pathlib.Path(os.environ["BUILD_RESULT_PATH"]); p.parent.mkdir(parents=True, exist_ok=True); data=json.loads(p.read_text()) if p.exists() else {}; ref="$(REGISTRY_AND_USERNAME)/nonfree-kmod-nvidia-production:$(IMAGE_TAG)"; digest=subprocess.check_output(["crane","digest",ref], text=True).strip(); data["extension_image"]=ref+"@"+digest; p.write_text(json.dumps(data, indent=2)+chr(10))'
